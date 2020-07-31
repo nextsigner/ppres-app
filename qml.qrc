@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>XGetPres.qml</file>
+        <file>Boton.qml</file>
+        <file>XListProd.qml</file>
+        <file>XSearchProd.qml</file>
+        <file>XAbout.qml</file>
+    </qresource>
+</RCC>
