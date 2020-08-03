@@ -29,7 +29,8 @@ Item {
                 tipovivienda: tipoviv,
                 adicionalporelemento: adixelem,
                 precio: prec,
-                seleccionado: false
+                seleccionado: false,
+                cant:1
             }
         }
     }
@@ -56,7 +57,7 @@ Item {
                     color: 'transparent'
                     Text {
                         id: txtDes
-                        text: '<b>Categoria: </b> '+categoria+'<br /><br /><b>'+nombre+'</b><br /><br /><b>Tipo de Vivienda: </b>'+tipovivienda+'<br /><br /><b>Adicional p/elemento: </b> $'+adicionalporelemento
+                        text: '<b>Categoria: </b> '+categoria+'<br /><br /><b>'+nombre+'</b><br /><br /><b>Tipo de Vivienda: </b>'+tipovivienda+'<br /><br /><b>Adicional p/elemento: </b> $'+adicionalporelemento+'<br /><b>Cantidad: </b>'+cant
                         width: parent.width-app.fs*2
                         height: contentHeight+app.fs
                         font.pixelSize: app.fs
@@ -71,13 +72,37 @@ Item {
                     height: txtDes.contentHeight+app.fs*2
                     border.width: seleccionado?3:1
                     border.color: 'black'
-                    color: 'transparent'
-                    Text {
-                        id: txtPres
-                        text: '$'+precio
-                        font.pixelSize: app.fs
+                    color: 'gray'
+                    Column{
                         anchors.centerIn: parent
-                        wrapMode: Text.WordWrap
+                        spacing: app.fs
+                        Text {
+                            id: txtPres
+                            text: cant===1?'$'+precio:'Por unidad $'+precio+' <br />'
+                            font.pixelSize: app.fs
+                            wrapMode: Text.WordWrap
+                        }
+                        Column{
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            Boton{
+                                id: btnRemoveCant
+                                text: 'Quitar Cantidad'
+                                fontSize: app.fs
+                                onClicked: {
+                                    if(cant>=2){
+                                        cant--
+                                    }
+                                }
+                            }
+                            Boton{
+                                id: btnAddCant
+                                text: 'Agregar Cantidad'
+                                fontSize: app.fs
+                                onClicked: {
+                                    cant++
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -126,7 +151,9 @@ Item {
     }
     function addProd(id, categoria, nom, tipoviv, adixelem, prec){
         lm.append(lm.addItem(id, categoria, nom, tipoviv, adixelem, prec))
-        lv.currentIndex=lm.count-1
+        if(!r.inSearch){
+            lv.currentIndex=lm.count-1
+        }
         sendSignal.restart()
     }
     function getTotal(){

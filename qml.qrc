@@ -6,5 +6,6 @@
         <file>XListProd.qml</file>
         <file>XSearchProd.qml</file>
         <file>XAbout.qml</file>
+        <file>XArea.qml</file>
     </qresource>
 </RCC>

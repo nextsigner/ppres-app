@@ -17,6 +17,22 @@ ApplicationWindow {
 
     property int mod: 0
     property var cProds: []
+
+    property int widthMarcador: 2
+
+    onModChanged: {
+        if(mod===0){
+            xXMenu.cBtn=bot1
+        }
+        if(mod===1){
+            xXMenu.cBtn=bot2
+        }
+        if(mod===2){
+            xXMenu.cBtn=bot3
+        }
+        marcador.x=xXMenu.cBtn.x+xXMenu.cBtn.width/2-marcador.width/2
+    }
+
     Item{
         id: xApp
         anchors.fill: parent
@@ -28,25 +44,41 @@ ApplicationWindow {
             Column{
                 id: col1
                 //anchors.horizontalCenter: parent.horizontalCenter
-                Row{
-                    id: xMenu
-                    Boton{
-                        id: bot1;
-                        text: 'Buscar Producto'
-                        fontSize: app.fs
-                        onClicked: app.mod=0
+                Item{
+                    id: xXMenu
+                    width: xMenu.width
+                    height: xMenu.height
+                    property var cBtn:bot1
+                    Rectangle{
+                        id: marcador
+                        width: app.widthMarcador
+                        height: xApp.height
+                        x:bot1.x+bot1.width/2-width/2
+                        color: 'black'
+                        Behavior on x{
+                            NumberAnimation{duration: 500; easing.type: Easing.InOutQuad}
+                        }
                     }
-                    Boton{
-                        id: bot2;
-                        text: 'Presupuesto'
-                        fontSize: app.fs
-                        onClicked: app.mod=1
-                    }
-                    Boton{
-                        id: bot3;
-                        text: 'Acerca de'
-                        fontSize: app.fs
-                        onClicked: app.mod=2
+                    Row{
+                        id: xMenu
+                        Boton{
+                            id: bot1;
+                            text: 'Buscar Producto'
+                            fontSize: app.fs
+                            onClicked: app.mod=0
+                        }
+                        Boton{
+                            id: bot2;
+                            text: 'Presupuesto'
+                            fontSize: app.fs
+                            onClicked: app.mod=1
+                        }
+                        Boton{
+                            id: bot3;
+                            text: 'Acerca de'
+                            fontSize: app.fs
+                            onClicked: app.mod=2
+                        }
                     }
                 }
                 XSearchProd{id: xSearchProd;visible: app.mod===0}

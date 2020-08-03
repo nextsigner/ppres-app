@@ -1,6 +1,6 @@
 import QtQuick 2.0
 
-Item {
+XArea {
     id: r
     width: xApp.width
     height: xApp.height

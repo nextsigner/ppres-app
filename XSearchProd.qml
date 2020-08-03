@@ -1,6 +1,6 @@
 import QtQuick 2.0
 
-Item {
+XArea {
     id: r
     width: xApp.width
     height: col.height
@@ -142,19 +142,40 @@ Item {
         Row{
             id: rowBtns
             Boton{
+                id: btnAddProd
                 text: xListProdSearch.idsSelected.length<=1?'Agregar Producto':'Agregar Productos'
                 fontSize: app.fs
-                enabled: xListProdSearch.idsSelected.length<=1
+                opacity: 0.0
+                enabled: opacity===1.0
+                //visible: xListProdSearch.listModel.count>=1
                 onClicked: {
                     for(var i=0;i<xListProdSearch.listModel.count;i++){
                         if(xListProdSearch.listModel.get(i).seleccionado){
-                            //console.log('Producto: '+xListProdSearch.listModel.get(i).nombre)
-                            xGetPres.list.listModel.append(xGetPres.list.listModel.addItem(xListProdSearch.listModel.get(i).numId, xListProdSearch.listModel.get(i).categoria, xListProdSearch.listModel.get(i).nombre, xListProdSearch.listModel.get(i).tipovivienda, xListProdSearch.listModel.get(i).adicionalporelemento, xListProdSearch.listModel.get(i).precio))
-                            //ncProds.push(app.cProds[i])
+                            let existe=false
+                            for(var i=0;i<xGetPres.list.listModel.count;i++){
+                                console.log('numId:['+xGetPres.list.listModel.get(i).numId+'] id:['+xListProdSearch.listModel.get(i).numId+']')
+                                if(xGetPres.list.listModel.get(i).numId===xListProdSearch.listModel.get(i).numId){
+                                    existe=true
+                                    break
+                                }
+                            }
+                            if(!existe){
+                                //console.log('Producto: '+xListProdSearch.listModel.get(i).nombre)
+                                xGetPres.list.listModel.append(xGetPres.list.listModel.addItem(xListProdSearch.listModel.get(i).numId, xListProdSearch.listModel.get(i).categoria, xListProdSearch.listModel.get(i).nombre, xListProdSearch.listModel.get(i).tipovivienda, xListProdSearch.listModel.get(i).adicionalporelemento, xListProdSearch.listModel.get(i).precio))
+                                //ncProds.push(app.cProds[i])
+                            }else{
+                                //Existe. Agregando cantidad
+                                for(i=0;i<xGetPres.list.listModel.count;i++){
+                                    if(xGetPres.list.listModel.get(i).numId===xListProdSearch.listModel.get(i).numId){
+                                        xGetPres.list.listModel.get(i).cant++
+                                        break
+                                    }
+                                }
+                            }
                         }
                     }
                     for(var i=0;i<xListProdSearch.listModel.count;i++){
-                       xListProdSearch.listModel.get(i).seleccionado=false
+                        xListProdSearch.listModel.get(i).seleccionado=false
                     }
                     app.mod=1
 
@@ -166,6 +187,30 @@ Item {
                         ncProds.push(xListProdSearch.idsSelected[i])
                     }
                     app.cProds=ncProds*/
+                }
+                Timer{
+                    id: t2
+                    running: true
+                    repeat: true
+                    interval: 500
+                    onTriggered: {
+                        let e=false
+                        let v=0
+                        for(var i=0;i<xListProdSearch.listModel.count;i++){
+                            if(xListProdSearch.listModel.get(i).seleccionado===true){
+                                e=true
+                                v++
+                            }
+                            if(v===1){
+                                btnAddProd.text='Agregar Producto'
+                            }
+                            if(v>=2){
+                                btnAddProd.text='Agregar Productos'
+                                break
+                            }
+                        }
+                        btnAddProd.opacity=e?1.0:0.0
+                    }
                 }
             }
         }
