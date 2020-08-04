@@ -152,22 +152,24 @@ XArea {
                     for(var i=0;i<xListProdSearch.listModel.count;i++){
                         if(xListProdSearch.listModel.get(i).seleccionado){
                             let existe=false
-                            for(var i=0;i<xGetPres.list.listModel.count;i++){
-                                console.log('numId:['+xGetPres.list.listModel.get(i).numId+'] id:['+xListProdSearch.listModel.get(i).numId+']')
-                                if(xGetPres.list.listModel.get(i).numId===xListProdSearch.listModel.get(i).numId){
+                            for(var i2=0;i2<xGetPres.list.listModel.count;i2++){
+                                console.log('numId:['+xGetPres.list.listModel.get(i2).numId+'] id:['+xListProdSearch.listModel.get(i2).numId+']')
+                                if(xGetPres.list.listModel.get(i2).numId===xListProdSearch.listModel.get(i2).numId){
                                     existe=true
                                     break
                                 }
                             }
                             if(!existe){
-                                //console.log('Producto: '+xListProdSearch.listModel.get(i).nombre)
-                                xGetPres.list.listModel.append(xGetPres.list.listModel.addItem(xListProdSearch.listModel.get(i).numId, xListProdSearch.listModel.get(i).categoria, xListProdSearch.listModel.get(i).nombre, xListProdSearch.listModel.get(i).tipovivienda, xListProdSearch.listModel.get(i).adicionalporelemento, xListProdSearch.listModel.get(i).precio))
+                                console.log('Producto no existe: '+xListProdSearch.listModel.get(i).nombre)
+                                xGetPres.list.listModel.append(xGetPres.list.listModel.addItem(xListProdSearch.listModel.get(i).numId, xListProdSearch.listModel.get(i).categoria, xListProdSearch.listModel.get(i).nombre, xListProdSearch.listModel.get(i).tipovivienda, xListProdSearch.listModel.get(i).adicionalporelemento, xListProdSearch.listModel.get(i).precio, xListProdSearch.listModel.get(i).cant))
                                 //ncProds.push(app.cProds[i])
                             }else{
                                 //Existe. Agregando cantidad
-                                for(i=0;i<xGetPres.list.listModel.count;i++){
-                                    if(xGetPres.list.listModel.get(i).numId===xListProdSearch.listModel.get(i).numId){
-                                        xGetPres.list.listModel.get(i).cant++
+                                //console.log('Producto existe: '+xListProdSearch.listModel.get(i).nombre)
+                                for(var i3=0;i3<xGetPres.list.listModel.count;i3++){
+                                    if(xGetPres.list.listModel.get(i3).numId===xListProdSearch.listModel.get(i2).numId){
+                                        let ncant=xListProdSearch.listModel.get(i2).cant+xGetPres.list.listModel.get(i3).cant
+                                        xGetPres.list.listModel.get(i3).cant=ncant
                                         break
                                     }
                                 }
@@ -176,6 +178,7 @@ XArea {
                     }
                     for(var i=0;i<xListProdSearch.listModel.count;i++){
                         xListProdSearch.listModel.get(i).seleccionado=false
+                        xListProdSearch.listModel.get(i).cant=0
                     }
                     app.mod=1
 
@@ -242,12 +245,22 @@ XArea {
     function setSearchResult(json){
         for(var i=0;i<Object.keys(json.productos).length;i++){
             if(json.productos[i].precio&&json.productos[i].tipovivienda){
-                console.log('P1'+i+': '+json.productos[i].categoria)
-                console.log('P2'+i+': '+json.productos[i].nombre)
-                console.log('P3'+i+': '+json.productos[i].tipovivienda)
-                console.log('P4'+i+': '+json.productos[i].adicionalporelemento)
-                console.log('P5'+i+': '+json.productos[i].precio)
-                xListProdSearch.addProd(json.productos[i]._id, json.productos[i].categoria, json.productos[i].nombre, json.productos[i].tipovivienda, json.productos[i].adicionalporelemento, json.productos[i].precio)
+//                console.log('P1'+i+': '+json.productos[i].categoria)
+//                console.log('P2'+i+': '+json.productos[i].nombre)
+//                console.log('P3'+i+': '+json.productos[i].tipovivienda)
+//                console.log('P4'+i+': '+json.productos[i].adicionalporelemento)
+//                console.log('P5'+i+': '+json.productos[i].precio)
+                let existe=false
+                let cant=0
+                for(var i2=0;i2<xGetPres.list.listModel.count;i2++){
+                    console.log('RS --> numId:['+xGetPres.list.listModel.get(i2).numId+'] id:['+json.productos[i]._id+']')
+                    if(xGetPres.list.listModel.get(i2).numId===json.productos[i]._id){
+                        existe=true
+                        cant=xGetPres.list.listModel.get(i2).cant
+                        break
+                    }
+                }
+                xListProdSearch.addProd(json.productos[i]._id, json.productos[i].categoria, json.productos[i].nombre, json.productos[i].tipovivienda, json.productos[i].adicionalporelemento, json.productos[i].precio, cant)
             }
         }
     }

@@ -8,7 +8,7 @@ XArea {
     property alias list: xListProd
     onVisibleChanged: {
         if(visible){
-            xTotalSinIVA.total=parseFloat(xListProd.getTotal()).toFixed(2)
+            setTotal()
         }
     }
     Rectangle{
@@ -93,5 +93,8 @@ XArea {
                 }
             }
         }
+    }
+    function setTotal(){
+        xTotalSinIVA.total=parseFloat(xListProd.getTotal()).toFixed(2)
     }
 }
