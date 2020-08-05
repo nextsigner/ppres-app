@@ -6,6 +6,12 @@ XArea {
     height: col.height
     anchors.horizontalCenter: parent.horizontalCenter
     property alias list: xListProdSearch
+    onVisibleChanged: {
+        if(visible){
+            xListProdSearch.updateData()
+            setTotal()
+        }
+    }
     Rectangle{
         anchors.fill: r
         color: 'red'
@@ -113,32 +119,48 @@ XArea {
         XListProd{
             id: xListProdSearch
             width: cabLV.width
-            height: xApp.height-xMenu.height-rowMarcadores.height-cabLV.height-rowBtns.height-xTotal.height-rowSearch.height-app.fs*2
+            height: xApp.height-xMenu.height-rowMarcadores.height-cabLV.height-rowBtns.height-xTotalConIVA.height-rowSearch.height-app.fs*2
             inSearch: true
-            //            onProductoAgregado: {
-            //                console.log('Producto agregado!')
-            //                xTotal.total=parseFloat(getTotal()).toFixed(2)
-            //            }
-        }
-        //        Row{
-        //            id: row
-        //            anchors.horizontalCenter: parent.horizontalCenter
-        Rectangle{
-            id: xTotal
-            width: r.width*0.4
-            height: app.fs*2
-            border.width: 1
-            border.color: 'black'
-            property real total: 0
-            anchors.right: parent.right
-            Text {
-                text: '<b>Total: $</b> '+xTotal.total
-                font.pixelSize: app.fs
-                anchors.centerIn: parent
-                wrapMode: Text.WordWrap
+            onDataChanged: {
+                console.log('SP Data changed!')
+                xTotalSinIVA.total=parseFloat(getTotal()).toFixed(2)
             }
         }
-        //}
+        Row{
+            id: row
+            anchors.right: parent.right
+            Rectangle{
+                id: xTotalSinIVA
+                width: r.width*0.4
+                height: app.fs*2
+                border.width: 1
+                border.color: 'black'
+                property real total: 0
+                onTotalChanged: {
+                    xTotalConIVA.total=total+(total/100*21)
+                }
+                Text {
+                    text: '<b>Total sin IVA: $</b> '+xTotalSinIVA.total
+                    font.pixelSize: app.fs
+                    anchors.centerIn: parent
+                    wrapMode: Text.WordWrap
+                }
+            }
+            Rectangle{
+                id: xTotalConIVA
+                width: r.width*0.4
+                height: app.fs*2
+                border.width: 1
+                border.color: 'black'
+                property real total: 0
+                Text {
+                    text: '<b>Total: $</b> '+xTotalConIVA.total
+                    font.pixelSize: app.fs
+                    anchors.centerIn: parent
+                    wrapMode: Text.WordWrap
+                }
+            }
+        }
         Row{
             id: rowBtns
             Boton{
@@ -150,13 +172,14 @@ XArea {
                 //visible: xListProdSearch.listModel.count>=1
                 onClicked: {
                     for(var i=0;i<xListProdSearch.listModel.count;i++){
+                        console.log('cccc '+i+': '+xListProdSearch.listModel.get(i).seleccionado)
                         if(xListProdSearch.listModel.get(i).seleccionado){
                             let existe=false
                             for(var i2=0;i2<xGetPres.list.listModel.count;i2++){
                                 console.log('numId:['+xGetPres.list.listModel.get(i2).numId+'] id:['+xListProdSearch.listModel.get(i2).numId+']')
-                                if(xGetPres.list.listModel.get(i2).numId===xListProdSearch.listModel.get(i2).numId){
+                                if(xGetPres.list.listModel.get(i2).numId===xListProdSearch.listModel.get(i).numId){
                                     existe=true
-                                    break
+                                    //break
                                 }
                             }
                             if(!existe){
@@ -170,7 +193,7 @@ XArea {
                                     if(xGetPres.list.listModel.get(i3).numId===xListProdSearch.listModel.get(i2).numId){
                                         let ncant=xListProdSearch.listModel.get(i2).cant+xGetPres.list.listModel.get(i3).cant
                                         xGetPres.list.listModel.get(i3).cant=ncant
-                                        break
+                                        //break
                                     }
                                 }
                             }
@@ -223,6 +246,9 @@ XArea {
         font.pixelSize: 30
         color: 'blue'
         visible: false
+    }
+    function setTotal(){
+        xTotalSinIVA.total=parseFloat(xListProdSearch.getTotal()).toFixed(2)
     }
     function getSearch(consulta){
         let url=app.serverUrl+':'+app.portRequest+'/ppres/searchproducto?consulta='+consulta

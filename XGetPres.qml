@@ -8,6 +8,7 @@ XArea {
     property alias list: xListProd
     onVisibleChanged: {
         if(visible){
+            xListProd.updateData()
             setTotal()
         }
     }
@@ -53,8 +54,8 @@ XArea {
         XListProd{
             id: xListProd
             height: xApp.height-xMenu.height-cabLV.height-xTotalSinIVA.height
-            onProductoAgregado: {
-                console.log('Producto agregado!')
+            onDataChanged: {
+                console.log('GP Data changed!')
                 xTotalSinIVA.total=parseFloat(getTotal()).toFixed(2)
             }
         }

@@ -9,7 +9,7 @@ Item {
     property real total: 0
     property bool inSearch: false
     property var idsSelected: []
-    signal productoAgregado()
+    signal dataChanged()
     ListView{
         id: lv
         width: r.width
@@ -57,33 +57,12 @@ Item {
                     onClicked: {
                         if(cant===0&&!seleccionado){
                             cant=1
+                            r.dataChanged()
                         }
                         seleccionado=!seleccionado
                         if(!r.inSearch){
                             xGetPres.setTotal()
                         }
-                        /*var nIdsSelected=[]
-                    if(r.idsSelected.indexOf(numId)<0){
-                        for(var i=0;i<r.idsSelected.length;i++){
-
-                            nIdsSelected[i]=r.idsSelected[i]
-
-                        }
-                        nIdsSelected.push(numId)
-                        r.idsSelected=nIdsSelected
-                        //r.idsSelected.push(numId)
-                    }else{
-                        for(var i=0;i<lm.count;i++){
-                            if(r.idsSelected[i]!==''+numId&&r.idsSelected[i]!==''){
-                                nIdsSelected[i]=r.idsSelected[i]
-                            }
-                        }
-                        r.idsSelected=nIdsSelected
-                    }
-                    for(i=0;i<lm.count;i++){
-                        lm.get(i).seleccionado=r.idsSelected.indexOf(lm.get(i).numId)>=0
-                    }
-                    console.log('ids:::'+r.idsSelected)*/
                     }
                 }
                 Rectangle{
@@ -161,6 +140,7 @@ Item {
                                         if(!r.inSearch){
                                             xGetPres.setTotal()
                                         }
+                                        r.dataChanged()
                                     }
                                 }
                                 Boton{
@@ -175,6 +155,7 @@ Item {
                                         if(!r.inSearch){
                                             xGetPres.setTotal()
                                         }
+                                        r.dataChanged()
                                     }
                                 }
                             }
@@ -189,11 +170,33 @@ Item {
                                     if(r.inSearch){
                                         xGetPres.setTotal()
                                     }
+                                    r.dataChanged()
                                 }
                             }
                         }
                     }
                 }
+            }
+            Rectangle{
+                id: xProdAgregado
+                anchors.fill: parent
+                opacity: 0.5
+                visible: false
+                Text{
+                    text: '<b>Agregado</b>'
+                    color: 'black'
+                    font.pixelSize: app.fs*3
+                    anchors.centerIn: parent
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        app.mod=1
+                    }
+                }
+            }
+            Component.onCompleted: {
+                setEstado()
             }
             function setEstado(){
                 let t=parseFloat(parseInt(cant) * parseFloat(precio))
@@ -202,8 +205,8 @@ Item {
                     return
                 }
                 for(var i2=0;i2<xGetPres.list.listModel.count;i2++){
-                   //console.log('numId:['+lm.get(i2).numId+'] id:['+xListProdSearch.listModel.get(i2).numId+']')
-//                    var existe=false
+                    //console.log('numId:['+lm.get(i2).numId+'] id:['+xListProdSearch.listModel.get(i2).numId+']')
+                    //                    var existe=false
                     if(numId===xGetPres.list.listModel.get(i2).numId){
                         let ncant=parseInt(xGetPres.list.listModel.get(i2).cant + cant)
                         txtCant.text+='<br /><b>Cant. pres.:</b> '+xGetPres.list.listModel.get(i2).cant
@@ -214,37 +217,49 @@ Item {
                         break
                     }
                 }
+                if(r.inSearch){
+                    for(var i=0;i<xGetPres.list.listModel.count;i++){
+                        if(numId===xGetPres.list.listModel.get(i).numId){
+                            xProdAgregado.visible=true
+                            break
+                        }
+                    }
+                }
+            }
         }
-        Component.onCompleted: {
-            setEstado()
+    }
+    Timer{
+        id: sendSignal
+        running: false
+        repeat: false
+        interval: 1000
+        onTriggered: {
+            r.dataChanged()
         }
     }
-}
-Timer{
-    id: sendSignal
-    running: false
-    repeat: false
-    interval: 1000
-    onTriggered: {
-        r.productoAgregado()
+    function clear(){
+        lm.clear()
     }
-}
-function clear(){
-    lm.clear()
-}
-function addProd(id, categoria, nom, tipoviv, adixelem, prec, cant){
-    lm.append(lm.addItem(id, categoria, nom, tipoviv, adixelem, prec, cant))
-    if(!r.inSearch){
-        lv.currentIndex=lm.count-1
+    function addProd(id, categoria, nom, tipoviv, adixelem, prec, cant){
+        lm.append(lm.addItem(id, categoria, nom, tipoviv, adixelem, prec, cant))
+        if(!r.inSearch){
+            lv.currentIndex=lm.count-1
+        }
+        sendSignal.restart()
     }
-    sendSignal.restart()
-}
-function getTotal(){
-    r.total=0.00
-    for(var i=0;i<lm.count;i++){
-        let p=parseFloat(lm.get(i).precio * lm.get(i).cant).toFixed(2)
-        r.total=parseFloat(r.total) + parseFloat(p)
+    function getTotal(){
+        r.total=0.00
+        for(var i=0;i<lm.count;i++){
+            let p=parseFloat(lm.get(i).precio * lm.get(i).cant).toFixed(2)
+            r.total=parseFloat(r.total) + parseFloat(p)
+        }
+        return r.total
     }
-    return r.total
-}
+    function updateData(){
+        for(var i=0;i<lv.children.length;i++){
+            if(lv.children[i].c){
+                lv.children[i].setEstado()
+            }
+        }
+    }
 }
