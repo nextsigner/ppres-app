@@ -7,5 +7,6 @@
         <file>XSearchProd.qml</file>
         <file>XAbout.qml</file>
         <file>XArea.qml</file>
+        <file>XCliente.qml</file>
     </qresource>
 </RCC>

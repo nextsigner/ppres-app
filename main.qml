@@ -30,6 +30,9 @@ ApplicationWindow {
         if(mod===2){
             xXMenu.cBtn=bot3
         }
+        if(mod===3){
+            xXMenu.cBtn=bot4
+        }
         marcador.x=xXMenu.cBtn.x+xXMenu.cBtn.width/2-marcador.width/2
     }
 
@@ -63,7 +66,7 @@ ApplicationWindow {
                         id: xMenu
                         Boton{
                             id: bot1;
-                            text: 'Buscar Producto'
+                            text: 'Buscar'
                             fontSize: app.fs
                             onClicked: app.mod=0
                         }
@@ -75,15 +78,22 @@ ApplicationWindow {
                         }
                         Boton{
                             id: bot3;
-                            text: 'Acerca de'
+                            text: 'Cliente'
                             fontSize: app.fs
                             onClicked: app.mod=2
+                        }
+                        Boton{
+                            id: bot4;
+                            text: 'Acerca de'
+                            fontSize: app.fs
+                            onClicked: app.mod=3
                         }
                     }
                 }
                 XSearchProd{id: xSearchProd;visible: app.mod===0}
                 XGetPres{id: xGetPres;visible: app.mod===1}
-                XAbout{id: xAbout;visible: app.mod===2}
+                XCliente{id: xCliente;visible: app.mod===2}
+                XAbout{id: xAbout;visible: app.mod===3}
             }
         }
     }
@@ -94,7 +104,7 @@ ApplicationWindow {
     Component.onCompleted: {
         if(Qt.platform.os!=='android'){
             app.y=30
-            app.x=500+300
+            app.x=500//+300
             app.width=350
             app.height=650
         }

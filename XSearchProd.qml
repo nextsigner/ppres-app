@@ -172,7 +172,7 @@ XArea {
                 //visible: xListProdSearch.listModel.count>=1
                 onClicked: {
                     for(var i=0;i<xListProdSearch.listModel.count;i++){
-                        console.log('cccc '+i+': '+xListProdSearch.listModel.get(i).seleccionado)
+                        //console.log('cccc '+i+': '+xListProdSearch.listModel.get(i).seleccionado)
                         if(xListProdSearch.listModel.get(i).seleccionado){
                             let existe=false
                             for(var i2=0;i2<xGetPres.list.listModel.count;i2++){
