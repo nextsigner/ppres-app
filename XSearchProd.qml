@@ -68,21 +68,21 @@ XArea {
             id: rowMarcadores
             anchors.horizontalCenter: parent.horizontalCenter
             Boton{
-                text: 'Vigilancia'
+                text: 'Sirenas'
                 fontSize: app.fs
                 enabled: xListProdSearch.idsSelected.length<=1
                 onClicked: {
                     xListProdSearch.clear()
-                    getSearch('vigilancia')
+                    getSearch('sirena')
                 }
             }
             Boton{
-                text: 'Services'
+                text: 'Cámara'
                 fontSize: app.fs
                 enabled: xListProdSearch.idsSelected.length<=1
                 onClicked: {
                     xListProdSearch.clear()
-                    getSearch('service')
+                    getSearch('Cámara')
                 }
             }
 
@@ -183,8 +183,8 @@ XArea {
                                 }
                             }
                             if(!existe){
-                                console.log('Producto no existe: '+xListProdSearch.listModel.get(i).nombre)
-                                xGetPres.list.listModel.append(xGetPres.list.listModel.addItem(xListProdSearch.listModel.get(i).numId, xListProdSearch.listModel.get(i).categoria, xListProdSearch.listModel.get(i).nombre, xListProdSearch.listModel.get(i).tipovivienda, xListProdSearch.listModel.get(i).adicionalporelemento, xListProdSearch.listModel.get(i).precio, xListProdSearch.listModel.get(i).cant))
+                                console.log('Producto no existe: '+xListProdSearch.listModel.get(i).descripcion)
+                                xGetPres.list.listModel.append(xGetPres.list.listModel.addItem(xListProdSearch.listModel.get(i).numId, xListProdSearch.listModel.get(i).descripcion, xListProdSearch.listModel.get(i).codigo, xListProdSearch.listModel.get(i).precioinstalacion, xListProdSearch.listModel.get(i).precioabono, xListProdSearch.listModel.get(i).adicionalriesgo, xListProdSearch.listModel.get(i).observaciones, xListProdSearch.listModel.get(i).cant))
                                 //ncProds.push(app.cProds[i])
                             }else{
                                 //Existe. Agregando cantidad
@@ -204,15 +204,6 @@ XArea {
                         xListProdSearch.listModel.get(i).cant=0
                     }
                     app.mod=1
-
-                    /*let ncProds=[]
-                    for(var i=0;i<app.cProds.length;i++){
-                        ncProds.push(app.cProds[i])
-                    }
-                    for(i=0;i<xListProdSearch.idsSelected.length;i++){
-                        ncProds.push(xListProdSearch.idsSelected[i])
-                    }
-                    app.cProds=ncProds*/
                 }
                 Timer{
                     id: t2
@@ -259,7 +250,7 @@ XArea {
             if (req.readyState === 4) {
                 if(req.status === 200){
                     let json=JSON.parse(req.responseText)
-                    console.log(req.responseText)
+                    //console.log(req.responseText)
                     setSearchResult(json)
                 }else{
                     console.log("Error el cargar el servidor de Mercurio. Code 1\n");
@@ -269,25 +260,26 @@ XArea {
         req.send(null);
     }
     function setSearchResult(json){
-        for(var i=0;i<Object.keys(json.productos).length;i++){
-            if(json.productos[i].precio&&json.productos[i].tipovivienda){
-//                console.log('P1'+i+': '+json.productos[i].categoria)
-//                console.log('P2'+i+': '+json.productos[i].nombre)
-//                console.log('P3'+i+': '+json.productos[i].tipovivienda)
-//                console.log('P4'+i+': '+json.productos[i].adicionalporelemento)
-//                console.log('P5'+i+': '+json.productos[i].precio)
+        for(var i=0;i<Object.keys(json.productos).length;i++){            
+                //Rows 'descripcion', 'codigo', 'precioinstalacion', 'precioabono', 'adicionalriesgo', 'observaciones'
+//                console.log('P1'+i+': '+json.productos[i].descripcion)
+//                console.log('P2'+i+': '+json.productos[i].codigo)
+//                console.log('P3'+i+': '+json.productos[i].precioinstalacion)
+//                console.log('P4'+i+': '+json.productos[i].precioabono)
+//                console.log('P5'+i+': '+json.productos[i].adicionalriesgo)
+//                console.log('P6'+i+': '+json.productos[i].observaciones)
                 let existe=false
                 let cant=0
                 for(var i2=0;i2<xGetPres.list.listModel.count;i2++){
-                    console.log('RS --> numId:['+xGetPres.list.listModel.get(i2).numId+'] id:['+json.productos[i]._id+']')
+                    //console.log('RS --> numId:['+xGetPres.list.listModel.get(i2).numId+'] id:['+json.productos[i]._id+']')
                     if(xGetPres.list.listModel.get(i2).numId===json.productos[i]._id){
                         existe=true
                         cant=xGetPres.list.listModel.get(i2).cant
                         break
                     }
                 }
-                xListProdSearch.addProd(json.productos[i]._id, json.productos[i].categoria, json.productos[i].nombre, json.productos[i].tipovivienda, json.productos[i].adicionalporelemento, json.productos[i].precio, cant)
-            }
+                xListProdSearch.addProd(json.productos[i]._id, json.productos[i].descripcion, json.productos[i].codigo, json.productos[i].precioinstalacion, json.productos[i].precioabono, json.productos[i].adicionalriesgo, json.productos[i].observaciones, cant)
+
         }
     }
 }

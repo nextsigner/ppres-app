@@ -21,14 +21,16 @@ Item {
     }
     ListModel{
         id: lm
-        function addItem(id, cat, nom, tipoviv, adixelem, prec, cantidad){
+        //Rows 'descripcion', 'codigo', 'precioinstalacion', 'precioabono', 'adicionalriesgo', 'observaciones'
+        function addItem(id, des, cod, pinst, pabono, adicriesgo, obs, cantidad){
             return{
                 numId: id,
-                categoria: cat,
-                nombre: nom,
-                tipovivienda: tipoviv,
-                adicionalporelemento: adixelem,
-                precio: prec,
+                descripcion: des,
+                codigo: cod,
+                precioinstalacion: pinst,
+                precioabono: pabono,
+                adicionalriesgo: adicriesgo,
+                observaciones: obs,
                 seleccionado: false,
                 cant:cantidad
             }
@@ -38,7 +40,7 @@ Item {
         id: rowList
         Item{
             width: lv.width//-app.fs
-            height: !seleccionado?xNom.height:xNom.height+app.fs*2
+            height: !seleccionado?xDes.height:xDes.height+app.fs*2
             anchors.horizontalCenter: parent.horizontalCenter
             property int c: cant
             onCChanged:{
@@ -49,7 +51,7 @@ Item {
             }
             Rectangle{
                 width: lv.width//-app.fs
-                height: xNom.height
+                height: xDes.height
                 anchors.centerIn: parent
                 color: seleccionado?'white':'#ccc'
                 MouseArea{
@@ -73,15 +75,16 @@ Item {
                 }
                 Row{
                     Rectangle{
-                        id: xNom
+                        id: xDes
                         width: lv.width*0.6
                         height: txtDes.contentHeight+app.fs*2
                         border.width: seleccionado?3:1
                         border.color: 'black'
                         color: 'transparent'
+                        //Rows 'descripcion', 'codigo', 'precioinstalacion', 'precioabono', 'adicionalriesgo', 'observaciones'
                         Text {
                             id: txtDes
-                            text: '<b>Categoria: </b> '+categoria+'<br /><br /><b>'+nombre+'</b><br /><br /><b>Tipo de Vivienda: </b>'+tipovivienda+'<br /><br /><b>Adicional p/elemento: </b> $'+adicionalporelemento
+                            text: '<b>Descripción: </b> '+descripcion+'<br /><br /><b>Código: '+codigo+'</b><br /><br /><b>Precio de Instalación: </b>$'+precioinstalacion+'<br /><br /><b>Precio Abono: </b> $'+precioabono+'<br /><b>Adicional por Riesgo: </b> $'+adicionalriesgo+'<br /><b>Observaciones: </b> $'+observaciones
                             width: parent.width-app.fs*2
                             height: contentHeight+app.fs
                             font.pixelSize: app.fs
@@ -105,7 +108,7 @@ Item {
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 Text {
                                     id: txtPres
-                                    text: '<b>Precio: </b>$'+precio
+                                    text: '<b>Precio: </b>$'+precioinstalacion
                                     font.pixelSize: app.fs
                                     width: xPrec.width-app.fs
                                     wrapMode: Text.WordWrap
@@ -199,7 +202,7 @@ Item {
                 setEstado()
             }
             function setEstado(){
-                let t=parseFloat(parseInt(cant) * parseFloat(precio))
+                let t=parseFloat(parseInt(cant) * parseFloat(precioinstalacion))
                 txtCant.text='<b>Cant.:</b> '+cant+' $'+t
                 if(!inSearch){
                     return
@@ -211,7 +214,7 @@ Item {
                         let ncant=parseInt(xGetPres.list.listModel.get(i2).cant + cant)
                         txtCant.text+='<br /><b>Cant. pres.:</b> '+xGetPres.list.listModel.get(i2).cant
                         txtCant.text+='<br /><b>Cant. total:</b> '+ncant
-                        txtCant.text+='<br /><b>P. total:</b> $'+parseFloat(ncant * precio).toFixed(2)
+                        txtCant.text+='<br /><b>P. total:</b> $'+parseFloat(ncant * precioinstalacion).toFixed(2)
                         //console.log('... numId:['+lm.get(i2).numId+'] id:['+xListProdSearch.listModel.get(i2).numId+']')
                         //existe=true
                         break
@@ -240,8 +243,8 @@ Item {
     function clear(){
         lm.clear()
     }
-    function addProd(id, categoria, nom, tipoviv, adixelem, prec, cant){
-        lm.append(lm.addItem(id, categoria, nom, tipoviv, adixelem, prec, cant))
+    function addProd(id, des, cod, pinst, pabono, adicriesgo, obs, cant){
+        lm.append(lm.addItem(id, des, cod, pinst, pabono, adicriesgo, obs, cant))
         if(!r.inSearch){
             lv.currentIndex=lm.count-1
         }
@@ -250,7 +253,7 @@ Item {
     function getTotal(){
         r.total=0.00
         for(var i=0;i<lm.count;i++){
-            let p=parseFloat(lm.get(i).precio * lm.get(i).cant).toFixed(2)
+            let p=parseFloat(lm.get(i).precioinstalacion * lm.get(i).cant).toFixed(2)
             r.total=parseFloat(r.total) + parseFloat(p)
         }
         return r.total

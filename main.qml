@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
+import Qt.labs.settings 1.1
 
 ApplicationWindow {
     id: app
@@ -11,7 +12,7 @@ ApplicationWindow {
     property string moduleName: 'ppres'
     property int fs: width*0.035
 
-    property string serverUrl: 'http://localhost'
+    property string serverUrl: 'http://66.97.46.73'
     property int portRequest: 8080
     property int portFiles: 8081
 
@@ -33,9 +34,18 @@ ApplicationWindow {
         if(mod===3){
             xXMenu.cBtn=bot4
         }
+        if(mod===4){
+            xXMenu.cBtn=bot5
+        }
         marcador.x=xXMenu.cBtn.x+xXMenu.cBtn.width/2-marcador.width/2
     }
-
+    Settings{
+        id: apps
+        fileName: 'config-ppres'
+        property string serverUrl: 'http://66.97.46.73'
+        property int portRequest: 8080
+        property int portFiles: 8081
+    }
     Item{
         id: xApp
         anchors.fill: parent
@@ -46,12 +56,15 @@ ApplicationWindow {
             contentHeight: col1.height//+app.fs*4
             Column{
                 id: col1
+                width: xApp.width
+                anchors.horizontalCenter: parent.horizontalCenter
                 //anchors.horizontalCenter: parent.horizontalCenter
                 Item{
                     id: xXMenu
                     width: xMenu.width
                     height: xMenu.height
                     property var cBtn:bot1
+                    anchors.horizontalCenter: parent.horizontalCenter
                     Rectangle{
                         id: marcador
                         width: app.widthMarcador
@@ -64,36 +77,51 @@ ApplicationWindow {
                     }
                     Row{
                         id: xMenu
+                        spacing: app.fs*0.1
+                        anchors.horizontalCenter: parent.horizontalCenter
                         Boton{
                             id: bot1;
                             text: 'Buscar'
                             fontSize: app.fs
+                            horizontalMargin: app.fs*0.1
                             onClicked: app.mod=0
                         }
                         Boton{
                             id: bot2;
                             text: 'Presupuesto'
                             fontSize: app.fs
+                           horizontalMargin: app.fs*0.1
                             onClicked: app.mod=1
                         }
                         Boton{
                             id: bot3;
                             text: 'Cliente'
                             fontSize: app.fs
+                            horizontalMargin: app.fs*0.1
                             onClicked: app.mod=2
                         }
                         Boton{
                             id: bot4;
+                            text: 'Configurar'
+                            fontSize: app.fs
+                            horizontalMargin: app.fs*0.1
+                            onClicked: app.mod=3
+                        }
+                        Boton{
+                            id: bot5;
                             text: 'Acerca de'
                             fontSize: app.fs
-                            onClicked: app.mod=3
+                            horizontalMargin: app.fs*0.1
+                            onClicked: app.mod=4
                         }
                     }
                 }
                 XSearchProd{id: xSearchProd;visible: app.mod===0}
                 XGetPres{id: xGetPres;visible: app.mod===1}
                 XCliente{id: xCliente;visible: app.mod===2}
-                XAbout{id: xAbout;visible: app.mod===3}
+                XConfig{id: xConfig;visible: app.mod===3}
+                XAbout{id: xAbout;visible: app.mod===4}
+
             }
         }
     }

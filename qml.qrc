@@ -8,5 +8,6 @@
         <file>XAbout.qml</file>
         <file>XArea.qml</file>
         <file>XCliente.qml</file>
+        <file>XConfig.qml</file>
     </qresource>
 </RCC>
