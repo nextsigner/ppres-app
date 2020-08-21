@@ -65,29 +65,6 @@ XArea {
             height: app.fs
         }
         Row{
-            id: rowMarcadores
-            anchors.horizontalCenter: parent.horizontalCenter
-            Boton{
-                text: 'Sirenas'
-                fontSize: app.fs
-                enabled: xListProdSearch.idsSelected.length<=1
-                onClicked: {
-                    xListProdSearch.clear()
-                    getSearch('sirena')
-                }
-            }
-            Boton{
-                text: 'Cámara'
-                fontSize: app.fs
-                enabled: xListProdSearch.idsSelected.length<=1
-                onClicked: {
-                    xListProdSearch.clear()
-                    getSearch('Cámara')
-                }
-            }
-
-        }
-        Row{
             id: cabLV
             anchors.horizontalCenter: parent.horizontalCenter
             Rectangle{
@@ -119,7 +96,7 @@ XArea {
         XListProd{
             id: xListProdSearch
             width: cabLV.width
-            height: xApp.height-xMenu.height-rowMarcadores.height-cabLV.height-rowBtns.height-xTotalConIVA.height-rowSearch.height-app.fs*2
+            height: xApp.height-xMenu.height-cabLV.height-rowBtns.height-xTotalConIVA.height-rowSearch.height-app.fs*2
             inSearch: true
             onDataChanged: {
                 console.log('SP Data changed!')
@@ -281,5 +258,6 @@ XArea {
                 xListProdSearch.addProd(json.productos[i]._id, json.productos[i].descripcion, json.productos[i].codigo, json.productos[i].precioinstalacion, json.productos[i].precioabono, json.productos[i].adicionalriesgo, json.productos[i].observaciones, cant)
 
         }
+        xListProdSearch.focus=true
     }
 }

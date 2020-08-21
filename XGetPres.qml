@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.12
 
 XArea {
     id: r
@@ -53,11 +54,38 @@ XArea {
         }
         XListProd{
             id: xListProd
-            height: xApp.height-xMenu.height-cabLV.height-xTotalSinIVA.height
+            height: xApp.height-xMenu.height-cabLV.height-xTotalSinIVA.height-rowTotalConDescuento.height-rowDescuento.height-app.fs*2
             onDataChanged: {
                 console.log('GP Data changed!')
                 xTotalSinIVA.total=parseFloat(getTotal()).toFixed(2)
             }
+        }
+        Item{
+            width: 2
+            height: app.fs
+        }
+        Row{
+            id: rowDescuento
+            spacing: app.fs
+            Text {
+                id: labelDescuento
+                text: '<b>Descuento: %</b>'
+                font.pixelSize: app.fs
+                anchors.verticalCenter: parent.verticalCenter
+            }
+            ComboBox{
+                id: cbDescuento
+                model: [0,10,20,30]
+                font.pixelSize: app.fs
+                width: app.fs*8
+                height: app.fs*2
+                anchors.verticalCenter: parent.verticalCenter
+                onCurrentTextChanged: calcTotal()
+            }
+        }
+        Item{
+            width: 2
+            height: app.fs
         }
         Row{
             id: row
@@ -70,7 +98,7 @@ XArea {
                 border.color: 'black'
                 property real total: 0
                 onTotalChanged: {
-                    xTotalConIVA.total=total+(total/100*21)
+                    calcTotal()
                 }
                 Text {
                     text: '<b>Total sin IVA: $</b> '+xTotalSinIVA.total
@@ -87,13 +115,35 @@ XArea {
                 border.color: 'black'
                 property real total: 0
                 Text {
-                    text: '<b>Total: $</b> '+xTotalConIVA.total
+                    text: '<b>Total c/IVA: $</b> '+xTotalConIVA.total
                     font.pixelSize: app.fs
                     anchors.centerIn: parent
                     wrapMode: Text.WordWrap
                 }
             }
         }
+        Row{
+            id: rowTotalConDescuento
+            anchors.right: parent.right
+            Rectangle{
+                id: xTotalConDescuento
+                width: r.width*0.4
+                height: app.fs*2
+                border.width: 1
+                border.color: 'black'
+                property real total: 0
+                Text {
+                    text: '<b>Total: $</b> '+xTotalConDescuento.total
+                    font.pixelSize: app.fs
+                    anchors.centerIn: parent
+                    wrapMode: Text.WordWrap
+                }
+            }
+        }
+    }
+    function calcTotal(){
+        xTotalConIVA.total=xTotalSinIVA.total+(xTotalSinIVA.total/100*21)
+        xTotalConDescuento.total=xTotalConIVA.total-(xTotalConIVA.total/100*parseInt(cbDescuento.currentText))
     }
     function setTotal(){
         xTotalSinIVA.total=parseFloat(xListProd.getTotal()).toFixed(2)

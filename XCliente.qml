@@ -135,4 +135,13 @@ XArea {
             }
         }
     }
+    Text {
+        text: '<b>Módulo en Construcción</b>'
+        width: r.width*0.8
+        wrapMode: Text.WordWrap
+        font.pixelSize: app.fs*3
+        color: 'red'
+        opacity: 0.5
+        anchors.centerIn: r
+    }
 }

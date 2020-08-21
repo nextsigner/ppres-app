@@ -42,7 +42,7 @@ XArea {
         }
         Text {
             width: r.width-app.fs
-            text: 'Esta aplicación fue creada con Qt Open Source bajo las licencias GPL y LGPL2. Para más información<br />dirigirse a <a href="https://www.qt.io/">https://www.qt.io/</a>'
+            text: 'Esta aplicación fue creada con Qt Open Source bajo las licencias LGPL y LGPL2. Para más información<br />dirigirse a <a href="https://www.qt.io/">https://www.qt.io/</a>'
             font.pixelSize: app.fs
             wrapMode: Text.WordWrap
             anchors.horizontalCenter: parent.horizontalCenter
