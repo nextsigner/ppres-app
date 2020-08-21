@@ -6,6 +6,7 @@ XArea {
     height: xApp.height
     onVisibleChanged: {
         if(visible){
+            tiTec.text=apps.cTec
             tiHost.text=apps.serverUrl
             tiHost.focus=true
         }
@@ -52,11 +53,38 @@ XArea {
                 }
             }
         }
+        Row{
+            id: rowTec
+            spacing: app.fs
+            Text {
+                id: labelTec
+                text: 'Técnico:'
+                anchors.verticalCenter: parent.verticalCenter
+            }
+            Rectangle{
+                id: xTiTec
+                width: r.width-labelTec.contentWidth-app.fs*2
+                height: app.fs*2
+                border.width: 2
+                clip: true
+                anchors.verticalCenter: parent.verticalCenter
+                TextInput{
+                    id: tiTec
+                    width: parent.width-app.fs*0.5
+                    height: parent.height-app.fs
+                    font.pixelSize: app.fs
+                    anchors.centerIn: parent
+                    //Keys.onReturnPressed: apps.serverUrl=text
+                    //onTextChanged: xListProdSearch.clear()
+                }
+            }
+        }
         Boton{
             text: 'Listo'
             fontSize: app.fs
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
+                apps.cTec=tiTec.text
                 apps.serverUrl=tiHost.text
                 app.serverUrl=tiHost.text
                 app.mod=0

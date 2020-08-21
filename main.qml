@@ -16,6 +16,9 @@ ApplicationWindow {
     property int portRequest: 8080
     property int portFiles: 8081
 
+    property string cTec: apps.cTec
+
+
     property int mod: 0
     property var cProds: []
 
@@ -45,6 +48,7 @@ ApplicationWindow {
         property string serverUrl: 'http://66.97.46.73'
         property int portRequest: 8080
         property int portFiles: 8081
+        property string cTec: 'tecnico-anónimo'
     }
     Item{
         id: xApp
@@ -135,6 +139,11 @@ ApplicationWindow {
             app.x=500//+300
             app.width=350
             app.height=650
+        }
+        //console.log('Qt.args: '+Qt.application.arguments.toString())
+        if(Qt.application.arguments.indexOf('-dev')>=0){
+            app.serverUrl='http://localhost'
+            return
         }
         getServerUrl()
     }

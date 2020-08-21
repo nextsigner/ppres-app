@@ -126,22 +126,69 @@ XArea {
                 }
             }
         }
+        Row{
+            id: rowContrato
+            spacing: app.fs
+            Text {
+                id: labelContrato
+                text: 'Contrato:'
+                anchors.verticalCenter: parent.verticalCenter
+            }
+            Rectangle{
+                id: xTiContrato
+                width: r.width-labelContrato.contentWidth-app.fs*2
+                height: app.fs*2
+                border.width: 2
+                clip: true
+                anchors.verticalCenter: parent.verticalCenter
+                TextInput{
+                    id: tiContrato
+                    width: parent.width-app.fs*0.5
+                    height: parent.height-app.fs
+                    font.pixelSize: app.fs
+                    anchors.centerIn: parent
+                    //Keys.onReturnPressed: getSearch(tiSearch.text)
+                    //onTextChanged: xListProdSearch.clear()
+                }
+            }
+        }
         Boton{
             text: 'Enviar Presupuesto'
             fontSize: app.fs
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
-
+                sendPres()
             }
         }
     }
-    Text {
-        text: '<b>Módulo en Construcción</b>'
-        width: r.width*0.8
-        wrapMode: Text.WordWrap
-        font.pixelSize: app.fs*3
-        color: 'red'
-        opacity: 0.5
-        anchors.centerIn: r
+//    Text {
+//        text: '<b>Módulo en Construcción</b>'
+//        width: r.width*0.8
+//        wrapMode: Text.WordWrap
+//        font.pixelSize: app.fs*3
+//        color: 'red'
+//        opacity: 0.5
+//        anchors.centerIn: r
+//    }
+    function sendPres(){
+        let url=app.serverUrl+':'+app.portRequest+'/ppres/nuevopresupuesto'//+consulta
+        console.log('Post '+app.moduleName+' server from '+url)
+        let d = new Date(Date.now())
+        var params = 'tecnico='+apps.cTec+'&cliente='+tiNombre.text+'&contrato='+tiContrato.text+'&productos={"productos":{"p1":"dato1"}}&fechaInstalacion='+d.getTime();
+        var req = new XMLHttpRequest();
+        req.open('POST', url, true);
+        req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')//.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        req.onreadystatechange = function (aEvt) {
+            if (req.readyState === 4) {
+                if(req.status === 200){
+                    let json=JSON.parse(req.responseText)
+                    console.log('Response Pres: '+req.responseText)
+                    //setSearchResult(json)
+                }else{
+                    console.log("Error el cargar el servidor de Ppres. Code 1\n");
+                }
+            }
+        };
+        req.send(params);
     }
 }
