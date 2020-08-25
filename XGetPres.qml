@@ -148,4 +148,23 @@ XArea {
     function setTotal(){
         xTotalSinIVA.total=parseFloat(xListProd.getTotal()).toFixed(2)
     }
+    function getJsonProds(){
+        let json='{'
+        for(var i=0;i<xListProd.listModel.count;i++){
+            if(i!==0){
+                json+=','
+            }
+            json+='"item'+i+'":{"cant":'+xListProd.listModel.get(i).cant+','
+            json+='"descripcion":"'+xListProd.listModel.get(i).descripcion+'",'
+            json+='"codigo":"'+xListProd.listModel.get(i).codigo+'",'
+            json+='"precioinstalacion":"'+xListProd.listModel.get(i).precioinstalacion+'",'
+            json+='"precioabono":"'+xListProd.listModel.get(i).precioabono+'",'
+            json+='"adicionalriesgo":"'+xListProd.listModel.get(i).adicionalriesgo+'",'
+            json+='"observaciones":"'+xListProd.listModel.get(i).observaciones+'",'
+            json+='"totalItem":"'+xListProd.listModel.get(i).totalItem+'"'
+            json+='}'
+        }
+        json+='}'
+        return json
+    }
 }

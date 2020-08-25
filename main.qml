@@ -24,6 +24,8 @@ ApplicationWindow {
 
     property int widthMarcador: 2
 
+    property bool devSending: false
+
     onModChanged: {
         if(mod===0){
             xXMenu.cBtn=bot1
@@ -49,6 +51,7 @@ ApplicationWindow {
         property int portRequest: 8080
         property int portFiles: 8081
         property string cTec: 'tecnico-anónimo'
+        property int vdev: 1
     }
     Item{
         id: xApp
@@ -99,7 +102,7 @@ ApplicationWindow {
                         }
                         Boton{
                             id: bot3;
-                            text: 'Cliente'
+                            text: 'Enviar'
                             fontSize: app.fs
                             horizontalMargin: app.fs*0.1
                             onClicked: app.mod=2
@@ -132,6 +135,10 @@ ApplicationWindow {
     Shortcut{
         sequence: 'Esc'
         onActivated: Qt.quit()
+    }
+    Shortcut{
+        sequence: 'Ctrl+a'
+        onActivated: xCliente.sendExample()
     }
     Component.onCompleted: {
         if(Qt.platform.os!=='android'){

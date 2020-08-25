@@ -32,7 +32,8 @@ Item {
                 adicionalriesgo: adicriesgo,
                 observaciones: obs,
                 seleccionado: false,
-                cant:cantidad
+                cant:cantidad,
+                totalItem: 0.00
             }
         }
     }
@@ -214,7 +215,9 @@ Item {
                         let ncant=parseInt(xGetPres.list.listModel.get(i2).cant + cant)
                         txtCant.text+='<br /><b>Cant. pres.:</b> '+xGetPres.list.listModel.get(i2).cant
                         txtCant.text+='<br /><b>Cant. total:</b> '+ncant
-                        txtCant.text+='<br /><b>P. total:</b> $'+parseFloat(ncant * precioinstalacion).toFixed(2)
+                        let nti=parseFloat(ncant * precioinstalacion).toFixed(2)
+                        totalItem=nti
+                        txtCant.text+='<br /><b>P. total:</b> $'+nti
                         //console.log('... numId:['+lm.get(i2).numId+'] id:['+xListProdSearch.listModel.get(i2).numId+']')
                         //existe=true
                         break
