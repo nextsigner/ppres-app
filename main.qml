@@ -12,6 +12,8 @@ ApplicationWindow {
     property string moduleName: 'ppres'
     property int fs: width*0.035
 
+    property bool cfgValida: false
+
     property string serverUrl: 'http://66.97.46.73'
     property int portRequest: 8080
     property int portFiles: 8081
@@ -50,7 +52,9 @@ ApplicationWindow {
         property string serverUrl: 'http://66.97.46.73'
         property int portRequest: 8080
         property int portFiles: 8081
-        property string cTec: 'tecnico-anónimo'
+        property string cTec: ''
+        property string cTecTel: ''
+        property string cTecEMail: ''
         property int vdev: 1
     }
     Item{
@@ -92,6 +96,7 @@ ApplicationWindow {
                             fontSize: app.fs
                             horizontalMargin: app.fs*0.1
                             onClicked: app.mod=0
+                            opacity: app.mod===0?1.0:0.65
                         }
                         Boton{
                             id: bot2;
@@ -99,6 +104,7 @@ ApplicationWindow {
                             fontSize: app.fs
                            horizontalMargin: app.fs*0.1
                             onClicked: app.mod=1
+                            opacity: app.mod===1?1.0:0.65
                         }
                         Boton{
                             id: bot3;
@@ -106,6 +112,7 @@ ApplicationWindow {
                             fontSize: app.fs
                             horizontalMargin: app.fs*0.1
                             onClicked: app.mod=2
+                            opacity: app.mod===2?1.0:0.65
                         }
                         Boton{
                             id: bot4;
@@ -113,6 +120,7 @@ ApplicationWindow {
                             fontSize: app.fs
                             horizontalMargin: app.fs*0.1
                             onClicked: app.mod=3
+                            opacity: app.mod===3?1.0:0.65
                         }
                         Boton{
                             id: bot5;
@@ -120,6 +128,7 @@ ApplicationWindow {
                             fontSize: app.fs
                             horizontalMargin: app.fs*0.1
                             onClicked: app.mod=4
+                            opacity: app.mod===4?1.0:0.65
                         }
                     }
                 }
@@ -139,6 +148,20 @@ ApplicationWindow {
     Shortcut{
         sequence: 'Ctrl+a'
         onActivated: xCliente.sendExample()
+    }
+    Timer{
+        id: tCheckCfgValida
+        running: true
+        repeat: true
+        interval: 250
+        onTriggered: {
+            if(apps.cTec===''||apps.cTecTel===''||apps.cTecEMail===''){
+                app.mod=3
+            }
+            if(apps.cTec!==''&&apps.cTecTel!==''&&apps.cTecEMail!==''){
+                stop()
+            }
+        }
     }
     Component.onCompleted: {
         if(Qt.platform.os!=='android'){

@@ -164,6 +164,7 @@ XArea {
             json+='"totalItem":"'+xListProd.listModel.get(i).totalItem+'"'
             json+='}'
         }
+        json+=',"valores":{"totalSinIVA":'+xTotalSinIVA.total+', "totalConIVA":'+xTotalConIVA.total+', "totalConDescuento":'+xTotalConDescuento.total+', "descuento":"'+cbDescuento.currentText+'"}'
         json+='}'
         return json
     }
