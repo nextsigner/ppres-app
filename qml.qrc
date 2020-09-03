@@ -9,5 +9,7 @@
         <file>XArea.qml</file>
         <file>XCliente.qml</file>
         <file>XConfig.qml</file>
+        <file>UCalendar.qml</file>
+        <file>DatePicker.qml</file>
     </qresource>
 </RCC>

@@ -261,13 +261,15 @@ XArea {
                 wrapMode: Text.WordWrap
                 anchors.horizontalCenter: parent.horizontalCenter
             }
-            Calendar{
+            UCalendar{
                 id: calFI
                 width: parent.width
+                height: r.height*0.5
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             Row{
                 spacing: app.fs
+                anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     text: 'Hora:'
                     font.pixelSize: app.fs
@@ -275,6 +277,8 @@ XArea {
                 }
                 SpinBox{
                     id:spHora
+                    width: app.fs*5
+                    font.pixelSize: app.fs
                     minimumValue: 0
                     maximumValue: 23
                     stepSize: 1
@@ -288,6 +292,8 @@ XArea {
                 }
                 SpinBox{
                     id:spMinutos
+                    width: app.fs*5
+                    font.pixelSize: app.fs
                     minimumValue: 0
                     maximumValue: 59
                     stepSize: 5
@@ -326,7 +332,7 @@ XArea {
         let d=new Date(Date.now())
         spHora.value=d.getHours()
         spMinutos.value=d.getMinutes()
-        calFI.minimumDate=new Date(Date.now())
+        //calFI.minimumDate=new Date(Date.now())
         tiFechaInstalacion.text=new Date(Date.now()).toString()
     }
     function sendExample(){

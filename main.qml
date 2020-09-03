@@ -11,6 +11,10 @@ ApplicationWindow {
     title: "PPres"
     property string moduleName: 'ppres'
     property int fs: width*0.035
+    property color c1: 'white'
+    property color c2: 'black'
+    property color c3: '#ccc'
+    property color c4: 'red'
 
     property bool cfgValida: false
 

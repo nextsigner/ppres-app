@@ -150,8 +150,10 @@ XArea {
         }
         Text {
             id: labelStatusTecConfig
-            anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: app.fs*2
+            width: r.width-app.fs*2
+            wrapMode: Text.WordWrap
+            //anchors.verticalCenter: parent.verticalCenter
+            font.pixelSize: app.fs
         }
         Boton{
             id: btnSetConfigData
@@ -160,6 +162,10 @@ XArea {
             anchors.horizontalCenter: parent.horizontalCenter
             KeyNavigation.tab: tiTec
             onClicked: {
+                tiHost.focus=false
+                tiTec.focus=false
+                tiTecTel.focus=false
+                tiTecEMail.focus=false
                 if(tiTec.text!==''&&tiTecTel.text!==''&&tiTecEMail.text!==''){
                     apps.cTec=tiTec.text
                     apps.cTecTel=tiTecTel.text
@@ -179,6 +185,11 @@ XArea {
         id: xAcceso
         anchors.fill: r
         property string uClaveAcc: ''
+        onVisibleChanged: {
+            if(!visible){
+                tiClaveAcc.focus=false
+            }
+        }
         MouseArea{
             anchors.fill: parent
         }
