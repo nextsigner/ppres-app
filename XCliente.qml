@@ -356,6 +356,7 @@ XArea {
         return tiNombre.text+tiCorreo.text+tiContrato.text+tiDom.text+tiTel.text
     }
     function sendPres(){
+        loading.visible=true
         let d = new Date(Date.now())
         let url=app.serverUrl+':'+app.portRequest+'/ppres/nuevopresupuesto?r='+d.getTime()//+consulta
         console.log('Post '+app.moduleName+' server from '+url)
@@ -372,7 +373,7 @@ XArea {
                     let json
                     try {
                         json=JSON.parse(req.responseText)
-                        labelStatus.text='El presupuesto se ha enviado corractatemte.'
+                        labelStatus.text='El presupuesto se ha enviado correctamente.'
                     } catch(e) {
                         labelStatus.text='Error al enviar el presupuesto. '+e
                     }
@@ -380,8 +381,12 @@ XArea {
                 }else{
                     console.log("Error el cargar el servidor de Ppres. Code 1\n");
                     btnEnviarPres.enabled=true
-                    labelStatus.text='Error al enviar el presupuesto. El servidor no está respondiendo correctamente a este requerimiento.'
+                    let msg='Error al enviar el presupuesto. El servidor no está respondiendo correctamente a este requerimiento.'
+                    labelStatus.text=msg
+                    let comp=Qt.createComponent("XMsgBox.qml")
+                    let obj=comp.createObject(r, {text:msg})
                 }
+                loading.visible=false
             }
         };
         req.send(params);

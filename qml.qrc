@@ -11,5 +11,7 @@
         <file>XConfig.qml</file>
         <file>UCalendar.qml</file>
         <file>DatePicker.qml</file>
+        <file>XMsgBox.qml</file>
+        <file>XLoading.qml</file>
     </qresource>
 </RCC>

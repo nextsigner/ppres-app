@@ -56,6 +56,7 @@ XArea {
                 text: 'Buscar'
                 fontSize: app.fs
                 onClicked: {
+                    tiSearch.focus=false
                     getSearch(tiSearch.text)
                 }
             }
@@ -108,32 +109,38 @@ XArea {
             anchors.right: parent.right
             Rectangle{
                 id: xTotalSinIVA
-                width: r.width*0.4
+                width: r.width*0.5
                 height: app.fs*2
                 border.width: 1
                 border.color: 'black'
+                clip: true
                 property real total: 0
                 onTotalChanged: {
                     xTotalConIVA.total=total+(total/100*21)
                 }
                 Text {
-                    text: '<b>Total sin IVA: $</b> '+xTotalSinIVA.total
+                    text: '<b>Total sin IVA: $</b> '+parseFloat(xTotalSinIVA.total).toFixed(2)
                     font.pixelSize: app.fs
-                    anchors.centerIn: parent
+                    anchors.right: parent.right
+                    anchors.rightMargin: app.fs
+                    anchors.verticalCenter: parent.verticalCenter
                     wrapMode: Text.WordWrap
                 }
             }
             Rectangle{
                 id: xTotalConIVA
-                width: r.width*0.4
+                width: r.width*0.5
                 height: app.fs*2
                 border.width: 1
                 border.color: 'black'
+                clip: true
                 property real total: 0
                 Text {
-                    text: '<b>Total: $</b> '+xTotalConIVA.total
+                    text: '<b>Total: $</b> '+parseFloat(xTotalConIVA.total).toFixed(2)
                     font.pixelSize: app.fs
-                    anchors.centerIn: parent
+                    anchors.right: parent.right
+                    anchors.rightMargin: app.fs
+                    anchors.verticalCenter: parent.verticalCenter
                     wrapMode: Text.WordWrap
                 }
             }
@@ -219,6 +226,7 @@ XArea {
         xTotalSinIVA.total=parseFloat(xListProdSearch.getTotal()).toFixed(2)
     }
     function getSearch(consulta){
+        loading.visible=true
         let url=app.serverUrl+':'+app.portRequest+'/ppres/searchproducto?consulta='+consulta
         console.log('Get '+app.moduleName+' server from '+url)
         var req = new XMLHttpRequest();
@@ -230,8 +238,11 @@ XArea {
                     //console.log(req.responseText)
                     setSearchResult(json)
                 }else{
-                    console.log("Error el cargar el servidor de Mercurio. Code 1\n");
+                    console.log("Error el cargar el servidor de Ppres. Code 1\n");
+                    let comp=Qt.createComponent("XMsgBox.qml")
+                    let obj=comp.createObject(r, {text:'Error! El servidor no está disponible.'})
                 }
+                loading.visible=false
             }
         };
         req.send(null);

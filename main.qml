@@ -144,6 +144,7 @@ ApplicationWindow {
 
             }
         }
+        XLoading{id: loading}
     }
     Shortcut{
         sequence: 'Esc'
